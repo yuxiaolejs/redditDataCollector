@@ -1,6 +1,8 @@
 const axios = require("axios")
 const fs = require("fs")
 
+const dataSetName = "controversialAll1000"
+
 function collectData(sort, limit, after) {
     if (sort != "") sort = `/${sort}`
     if (limit > 100) limit = 100
@@ -39,5 +41,5 @@ function collectDataRecursive(sort, limit, after) {
 }
 
 collectDataRecursive("controversial", 1000, "").then(res => {
-    fs.writeFileSync("data.json", JSON.stringify(dataRes, null, 2))
+    fs.writeFileSync(`./data/${dataSetName}.json`, JSON.stringify(dataRes, null, 2))
 })
