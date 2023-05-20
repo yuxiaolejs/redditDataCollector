@@ -36,10 +36,12 @@ boxplot(df$comments~df$upvote_ratio,col=c("red","green","purple"))
 plot(df$up,df$comments, xlim = c(- 1, 20), ylim = c(- 1, 500))
 df = read.csv("./data/topAll1000.csv")
 df2 = read.csv("./data/controversialAll1000.csv")
+df3 = rbind(df,df2)
+
 ```
 
 ```{r}
-mean_comments <- tapply(df$comments, df$up, mean)
+mean_comments <- tapply(df3$comments, df3$up, mean)
 
 # Create a new data frame for plotting
 df_grouped <- data.frame(
@@ -58,7 +60,7 @@ plot(df_grouped$upvotes, df_grouped$mean_comments, type = "l",
 
 ```{r}
 # Calculate the mean of comments for each upvote count
-mean_comments <- tapply(df$comments, df$up, mean)
+mean_comments <- tapply(df3$comments, df3$up, mean)
 
 # Create a new data frame for plotting
 df_grouped <- data.frame(
@@ -80,20 +82,31 @@ plot(df_grouped$upvotes, df_grouped$mean_comments,
      xlab = "Upvotes", ylab = "Average Comments", 
      main = "Average Comments per Upvote", type = "n")  # empty plot
 lines(df_grouped$up, loess_predictions, col = "blue")  # loess curve
+
+
 ```
 
 ```{r}
-boxplot(df$comments,df2$comments)
+# boxplot(df$comments,df2$comments)
 par(mar = c(4, 8, 4.1, 2.1))
-barplot(table(df$flair),las=2,horiz = TRUE)
-barplot(table(df2$flair),las=2,horiz = TRUE)
-df3 = rbind(df,df2)
+barplot(table(df$flair),las=2,horiz = TRUE, main="Number of flairs in top 1000 posts")
+barplot(table(df2$flair),las=2,horiz = TRUE, main="Number of flairs in top 1000 controversial posts")
 par(mar = c(4, 8, 4.1, 2.1))
-barplot(table(df3$flair),las=2,horiz = TRUE)
+barplot(table(df3$flair),las=2,horiz = TRUE, main="Number of flairs in 2000 posts")
+
+print(cor(df3$up, df3$comments))
+abline(lm(df3$up ~ df3$comments))
+```
+
+```{r}
+print(cor(df3$up, df3$comments))
+plot(df3$comments~df3$up)
+print(lm(df3$comments~df3$up))
+abline(lm(df3$comments~df3$up))
 ```
 ```{r}
 
-boxplot(df3[df3$flair=="Asshole","comments"],df3[df3$flair=="Not the A-hole","comments"])
+# boxplot(df3[df3$flair=="Asshole","comments"],df3[df3$flair=="Not the A-hole","comments"])
 
 df_sub <- df3[df3$flair %in% c("Asshole", "Not the A-hole"),]
 
