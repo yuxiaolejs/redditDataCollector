@@ -9,27 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-```{r}
+```{r, echo=FALSE}
 df = read.csv("./data/controversialAll1000.csv")
 plot(df$upvote_ratio,df$comments)
 boxplot(df$comments~df$upvote_ratio,col=c("red","green","purple"))
@@ -38,9 +19,15 @@ df = read.csv("./data/topAll1000.csv")
 df2 = read.csv("./data/controversialAll1000.csv")
 df3 = rbind(df,df2)
 
+print("Summary of top 1000")
+summary(df[c(4,6,8)])
+print("Summary of top 1000 controversial")
+summary(df2[c(4,6,8)])
+print("Summary of all 2000")
+summary(df3[c(4,6,8)])
 ```
 
-```{r}
+```{r, echo=FALSE}
 mean_comments <- tapply(df3$comments, df3$up, mean)
 
 # Create a new data frame for plotting
@@ -58,7 +45,7 @@ plot(df_grouped$upvotes, df_grouped$mean_comments, type = "l",
      main = "Average Comments per Upvote")
 ```
 
-```{r}
+```{r, echo=FALSE}
 # Calculate the mean of comments for each upvote count
 mean_comments <- tapply(df3$comments, df3$up, mean)
 
@@ -86,25 +73,25 @@ lines(df_grouped$up, loess_predictions, col = "blue")  # loess curve
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 # boxplot(df$comments,df2$comments)
 par(mar = c(4, 8, 4.1, 2.1))
 barplot(table(df$flair),las=2,horiz = TRUE, main="Number of flairs in top 1000 posts")
 barplot(table(df2$flair),las=2,horiz = TRUE, main="Number of flairs in top 1000 controversial posts")
 par(mar = c(4, 8, 4.1, 2.1))
 barplot(table(df3$flair),las=2,horiz = TRUE, main="Number of flairs in 2000 posts")
-
+print("Correlation Score")
 print(cor(df3$up, df3$comments))
 abline(lm(df3$up ~ df3$comments))
 ```
 
-```{r}
+```{r, echo=FALSE}
 print(cor(df3$up, df3$comments))
-plot(df3$comments~df3$up)
+plot(df3$comments~df3$up, pch=020, xlab="Upvotes", ylab="Comments", main="Linear Regression of Comments over Upvotes")
 print(lm(df3$comments~df3$up))
 abline(lm(df3$comments~df3$up))
 ```
-```{r}
+```{r, echo=FALSE}
 
 # boxplot(df3[df3$flair=="Asshole","comments"],df3[df3$flair=="Not the A-hole","comments"])
 
@@ -115,20 +102,23 @@ boxplot(comments ~ flair, data = df_sub,
         xlab = "Flair", ylab = "Comments", 
         main = "Comments by Flair",
         names = c("Asshole", "Not the A-hole"),
-        ylim = c (0,8000))
+        ylim = c (0,8000),
+        col=c("red","green","purple"))
 
 # Use the boxplot() function with a formula argument
 boxplot(up ~ flair, data = df_sub, 
         xlab = "Flair", ylab = "Upvotes", 
         main = "Upvotes by Flair",
         names = c("Asshole", "Not the A-hole"),
-        ylim = c (0,50000))
+        ylim = c (0,50000),
+        col=c("red","green","purple"))
 
 boxplot(upvote_ratio ~ flair, data = df_sub, 
         xlab = "Flair", ylab = "Upvote Ratio", 
         main = "Upvote Ratio by Flair",
         names = c("Asshole", "Not the A-hole"),
-        ylim = c (0,1))
+        ylim = c (0,1),
+        col=c("red","green","purple"))
 ```
 ```{r}
 
